@@ -56,4 +56,12 @@ class AuthController extends Controller
             'token' => $token,
         ], 'Login successful.');
     }
+
+    public function profile()
+    {
+        return $this->successResponse(
+                auth()->user(), 
+                'User profile retrieved successfully.'
+        );
+    }
 }
