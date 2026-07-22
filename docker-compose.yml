@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: product-api-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: product_api
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5439:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+volumes:
+  postgres_data:
