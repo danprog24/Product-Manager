@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductService
 {
@@ -34,7 +35,7 @@ class ProductService
 
     public function create(array $data)
     {
-        return Product::create($data);
+        return auth()->user()->products()->create($data);
     }
 
     public function update(Product $product, array $data)

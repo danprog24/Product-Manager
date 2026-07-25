@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject as JwtSubject;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
@@ -26,5 +27,10 @@ class User extends Authenticatable Implements JwtSubject
    public function getJWTCustomClaims()
    {
        return [];
+   }
+
+   public function products()
+   {
+       return $this->hasMany(Product::class);
    }
 }
