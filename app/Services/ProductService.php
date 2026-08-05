@@ -13,24 +13,32 @@ class ProductService
         $query = Product::query();
 
         if ($request->filled('search')) {
-            $query->where('name', 'ILike', '%' . $request->input('search') . '%');
+            $query->search(
+                $request->search
+            );
         }
 
         if ($request->filled('category_id')) {
-            $query->where('category_id', $request->input('category_id'));
+            $query->category(
+                $request->category_id
+            );
         }
 
         if ($request->filled('min_price')) {
-            $query->where('price', '>=', $request->input('min_price'));
+            $query->minPrice(
+                $request->input('min_price')
+            );
         }
 
         if ($request->filled('max_price')) {
-            $query->where('price', '<=', $request->input('max_price'));
+            $query->maxPrice(
+                $request->input('max_price')
+            );
         }
 
       
 
-        return $query->get();
+        return $query->paginate($request->input('per_page', 10));
     }
 
     public function create(array $data)

@@ -24,4 +24,49 @@ class Product extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * filter products by category
+     */
+    public function scopeCategory($query, $categoryId)
+    {
+        return $query->where(
+            'category_id',
+            $categoryId
+        );
+    }
+
+    /**
+     * Search products by name
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(
+            'name',
+            'ILIKE',
+            '%' . $search . '%'
+        );
+    }
+
+    /**
+     * filter products by minimum price
+     */
+    public function scopeMinPrice($query, $minPrice)
+    {
+        return $query->where(
+            'price', '>=', 
+            $minPrice
+        );
+    }
+
+    /**
+     * filter products by maximum price
+     */
+    public function scopeMaxPrice($query, $maxPrice)
+    {
+        return $query->where(
+            'price', '<=', 
+            $maxPrice
+        );
+    }
 }
