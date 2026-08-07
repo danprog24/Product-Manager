@@ -48,6 +48,8 @@ class ProductService
 
     public function update(Product $product, array $data)
     {
+        $this->authorizeProduct('update', $product);
+
         $product->update($data);
 
         return $product;
@@ -55,6 +57,9 @@ class ProductService
 
     public function delete(Product $product)
     {
+        $this->authorizeProduct('delete', $product);
+
         return $product->delete();
     }
+    
 }

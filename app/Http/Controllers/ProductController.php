@@ -75,4 +75,16 @@ class ProductController extends Controller
             'Product deleted successfully.'
         );
     }
+
+    // Get products of the authenticated user
+    public function myProducts(Request $request)
+    {
+        $user = $request->user();
+        $products = $this->productService->getProductsByUser($user);
+
+        return $this->successResponse(
+            ProductResource::collection($products),
+            'User products retrieved successfully.'
+        );
+    }
 }
