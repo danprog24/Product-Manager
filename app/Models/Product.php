@@ -13,8 +13,13 @@ class Product extends Model
         'price',
         'quantity',
         'category_id',
+        'user_id',
+        'image_url',
+        'image_public_id',
     ];
 
+
+    // Relationships
     public function category():BelongTo
     {
         return $this->belongsTo(Category::class);

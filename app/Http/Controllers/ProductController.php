@@ -31,28 +31,36 @@ class ProductController extends Controller
     }
 
     public function store(StoreProductRequest $request)
-    {
-        $product = $this->productService->create(
-            $request->validated()
-        );
+        {
+            $data = $request->validated();
 
-        return $this->successResponse(
-            new ProductResource($product),
-            'Product created successfully.',
-            201
-        );
-    }
+            $data['user_id'] = auth()->id();
 
+            $product = $this->productService->create($data);
+
+            return $this->successResponse(
+                new ProductResource($product),
+                'Product created successfully.',
+                201
+            );
+        }
+        
     public function show(Product $product)
-    {
-        return $this->successResponse(
-            new ProductResource($product),
-            'Product retrieved successfully.'
-        );
-    }
+        {
+            return $this->successResponse(
+                new ProductResource($product),
+                'Product retrieved successfully.'
+            );
+        }
 
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(
+        UpdateProductRequest
+         $request, 
+         Product $product
+        )
     {
+        $this->authorize('update', $product);
+
         $updated = $this->productService->update(
             $product,
             $request->validated()
