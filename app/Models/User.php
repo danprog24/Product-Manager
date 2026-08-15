@@ -2,19 +2,48 @@
 
 namespace App\Models;
 
+use App\Enum\Role;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject as JwtSubject;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements JwtSubject
 {
     use HasFactory;
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'role' => Role::class,
+        ];
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role->value === $role;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === Role::ADMIN;
+    }
+
+    public function isSeller(): bool
+    {
+        return $this->role === Role::SELLER;
+    }
+
+    public function isBuyer(): bool
+    {
+        return $this->role === Role::BUYER;
+    }
 
     public function getJWTIdentifier()
     {

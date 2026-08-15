@@ -9,6 +9,7 @@ use App\Http\Traits\ApiResponse;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Enum\Role;
 
 class AuthController extends Controller
 {
@@ -21,6 +22,7 @@ class AuthController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
+            'role' => Role::from($request->input('role')) // Ensure the role is stored as an enum
         ]);
 
         $token = JWTAuth::fromUser($user);
