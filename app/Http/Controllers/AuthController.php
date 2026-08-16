@@ -69,4 +69,15 @@ class AuthController extends Controller
                 'User profile retrieved successfully.'
         );
     }
+
+    // logout method to invalidate the token
+    public function logout()
+    {
+        try {
+            JWTAuth::invalidate(JWTAuth::getToken());
+            return $this->successResponse(null, 'User logged out successfully.');
+        } catch (\Exception $e) {
+            return $this->errorResponse('Failed to logout, please try again.', 500);
+        }
+    }
 }
