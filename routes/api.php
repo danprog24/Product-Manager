@@ -121,4 +121,9 @@ Route::middleware([
         'my-products',
         [ProductController::class, 'myProducts']
     );
+
+    Route::patch(
+        'orders/{id}/status',
+        [OrderController::class, 'updateStatus']
+    );
 });
