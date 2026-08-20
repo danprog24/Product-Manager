@@ -132,5 +132,15 @@ class OrderController extends Controller
             'data' => $order,
         ]);
     }
+
+    public function allOrders(): JsonResponse
+    {
+        $orders = $this->orderService->getAllOrders();
+
+        return response()->json([
+            'message' => 'Orders retrieved successfully.',
+            'data' => $orders,
+        ]);
+    }
     
 }

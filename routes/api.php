@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaystackWebhookController;
+use App\Http\Controllers\AdminOrderController;
 
 // =====================================================
 // Authentication
@@ -56,7 +57,9 @@ Route::post(
 
 Route::middleware('auth:api')->group(function () {
 
-    // Authentication
+    // =================================================
+    // Profile
+    // =================================================
 
     Route::get(
         'profile',
@@ -69,7 +72,9 @@ Route::middleware('auth:api')->group(function () {
     );
 
 
+    // =================================================
     // Checkout
+    // =================================================
 
     Route::post(
         'checkout',
@@ -77,7 +82,9 @@ Route::middleware('auth:api')->group(function () {
     );
 
 
-    // Payment verification
+    // =================================================
+    // Payment Verification
+    // =================================================
 
     Route::post(
         'orders/payment/verify/{reference}',
@@ -85,7 +92,9 @@ Route::middleware('auth:api')->group(function () {
     );
 
 
-    // Orders
+    // =================================================
+    // Buyer Orders
+    // =================================================
 
     Route::get(
         'orders',
@@ -108,6 +117,10 @@ Route::middleware([
     'role:admin,seller',
 ])->group(function () {
 
+    // =================================================
+    // Product Management
+    // =================================================
+
     Route::apiResource(
         'products',
         ProductController::class
@@ -117,8 +130,42 @@ Route::middleware([
         'destroy',
     ]);
 
+    // =================================================
+    // Seller Products
+    // =================================================
+
     Route::get(
         'my-products',
         [ProductController::class, 'myProducts']
+    );
+});
+
+
+// =====================================================
+// Admin
+// =====================================================
+
+Route::middleware([
+    'auth:api',
+    'role:admin',
+])->prefix('admin')->group(function () {
+
+    // =================================================
+    // Admin Orders
+    // =================================================
+
+    Route::get(
+        'orders',
+        [AdminOrderController::class, 'index']
+    );
+
+    Route::get(
+        'orders/{id}',
+        [AdminOrderController::class, 'show']
+    );
+
+    Route::patch(
+        'orders/{id}/status',
+        [AdminOrderController::class, 'updateStatus']
     );
 });
