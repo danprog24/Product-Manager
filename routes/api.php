@@ -1,12 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaystackWebhookController;
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\SellerOrderController;
+
 
 // =====================================================
 // Authentication
@@ -24,7 +28,7 @@ Route::post(
 
 
 // =====================================================
-// Public
+// Public Routes
 // =====================================================
 
 Route::apiResource(
@@ -130,6 +134,7 @@ Route::middleware([
         'destroy',
     ]);
 
+
     // =================================================
     // Seller Products
     // =================================================
@@ -137,6 +142,31 @@ Route::middleware([
     Route::get(
         'my-products',
         [ProductController::class, 'myProducts']
+    );
+});
+
+
+// =====================================================
+// Seller
+// =====================================================
+
+Route::middleware([
+    'auth:api',
+    'role:seller',
+])->prefix('seller')->group(function () {
+
+    // =================================================
+    // Seller Orders
+    // =================================================
+
+    Route::get(
+        'orders',
+        [SellerOrderController::class, 'index']
+    );
+
+    Route::get(
+        'orders/{id}',
+        [SellerOrderController::class, 'show']
     );
 });
 
@@ -167,5 +197,31 @@ Route::middleware([
     Route::patch(
         'orders/{id}/status',
         [AdminOrderController::class, 'updateStatus']
+    );
+});
+
+
+// =====================================================
+// Buyer Wishlist
+// =====================================================
+
+Route::middleware([
+    'auth:api',
+    'role:buyer',
+])->group(function () {
+
+    Route::get(
+        'wishlist',
+        [WishlistController::class, 'index']
+    );
+
+    Route::post(
+        'wishlist/{product}',
+        [WishlistController::class, 'store']
+    );
+
+    Route::delete(
+        'wishlist/{product}',
+        [WishlistController::class, 'destroy']
     );
 });

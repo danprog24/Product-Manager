@@ -20,9 +20,18 @@ class OrderController extends Controller
     ): JsonResponse {
 
         // Create the order
+       $validated = $request->validated();
+
         $order = $this->orderService->createOrder(
-            $request->validated('items'),
-            auth()->id()
+            $validated['items'],
+            auth()->id(),
+            [
+                'shipping_name' => $validated['shipping_name'],
+                'shipping_phone' => $validated['shipping_phone'],
+                'shipping_address' => $validated['shipping_address'],
+                'shipping_city' => $validated['shipping_city'],
+                'shipping_state' => $validated['shipping_state'],
+            ]
         );
 
         // Paystack expects the amount in kobo

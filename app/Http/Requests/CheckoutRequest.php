@@ -27,6 +27,36 @@ class CheckoutRequest extends FormRequest
                 'integer',
                 'min:1',
             ],
+
+            'shipping_name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'shipping_phone' => [
+                'required',
+                'string',
+                'max:30',
+            ],
+
+            'shipping_address' => [
+                'required',
+                'string',
+                'max:1000',
+            ],
+
+            'shipping_city' => [
+                'required',
+                'string',
+                'max:100',
+            ],
+
+            'shipping_state' => [
+                'required',
+                'string',
+                'max:100',
+            ],
         ];
     }
 }

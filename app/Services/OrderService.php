@@ -14,11 +14,13 @@ class OrderService
      */
     public function createOrder(
         array $items,
-        int $userId
+        int $userId,
+        array $shippingData
     ): Order {
         return DB::transaction(function () use (
             $items,
-            $userId
+            $userId,
+            $shippingData
         ) {
 
             $totalAmount = 0;
@@ -32,6 +34,22 @@ class OrderService
                 'status' => 'pending',
                 'payment_method' => 'paystack',
                 'payment_status' => 'unpaid',
+
+                // Shipping information
+                'shipping_name' =>
+                    $shippingData['shipping_name'],
+
+                'shipping_phone' =>
+                    $shippingData['shipping_phone'],
+
+                'shipping_address' =>
+                    $shippingData['shipping_address'],
+
+                'shipping_city' =>
+                    $shippingData['shipping_city'],
+
+                'shipping_state' =>
+                    $shippingData['shipping_state'],
             ]);
 
             foreach ($items as $item) {
@@ -237,4 +255,50 @@ class OrderService
             'items.product',
         ]);
     }
+
+    /**
+     * Get orders containing products
+     * belonging to the authenticated seller.
+     */
+    public function getSellerOrders(int $sellerId)
+    {
+        return Order::query()
+            ->whereHas('items', function ($query) use ($sellerId) {
+                $query->where('seller_id', $sellerId);
+            })
+            ->with([
+                'user',
+                'items' => function ($query) use ($sellerId) {
+                    $query->where('seller_id', $sellerId)
+                        ->with('product');
+                },
+            ])
+            ->latest()
+            ->get();
+    }
+
+
+    /**
+     * Get a specific order containing
+     * products belonging to the seller.
+     */
+    public function getSellerOrder(
+        int $orderId,
+        int $sellerId
+    ): Order {
+        return Order::query()
+            ->where('id', $orderId)
+            ->whereHas('items', function ($query) use ($sellerId) {
+                $query->where('seller_id', $sellerId);
+            })
+            ->with([
+                'user',
+                'items' => function ($query) use ($sellerId) {
+                    $query->where('seller_id', $sellerId)
+                        ->with('product');
+                },
+            ])
+            ->firstOrFail();
+    }
+
 }
