@@ -14,6 +14,7 @@ class SellerEarning extends Model
         'gross_amount',
         'commission',
         'net_amount',
+        'reserved_amount',
         'status',
     ];
 
@@ -23,6 +24,7 @@ class SellerEarning extends Model
             'gross_amount' => 'decimal:2',
             'commission' => 'decimal:2',
             'net_amount' => 'decimal:2',
+            'reserved_amount' => 'decimal:2',
         ];
     }
 
@@ -43,4 +45,13 @@ class SellerEarning extends Model
     {
         return $this->belongsTo(OrderItem::class);
     }
+
+    public function withdrawalItems()
+    {
+        return $this->hasMany(
+            SellerWithdrawalItem::class,
+            'seller_earning_id'
+        );
+    }
+
 }

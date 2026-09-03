@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\SellerEarning;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class OrderItem extends Model
 {
@@ -32,5 +34,10 @@ class OrderItem extends Model
             User::class,
             'seller_id'
         );
+    }
+
+    public function earning(): HasOne
+    {
+        return $this->hasOne(SellerEarning::class);
     }
 }

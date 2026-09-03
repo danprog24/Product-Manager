@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject as JwtSubject;
 
+use App\Models\SellerEarning;
+use App\Models\SellerWithdrawal;
+
 #[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements JwtSubject
@@ -53,6 +56,22 @@ class User extends Authenticatable implements JwtSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function sellerEarnings(): HasMany
+    {
+        return $this->hasMany(
+            SellerEarning::class,
+            'seller_id'
+        );
+    }
+
+    public function sellerWithdrawals(): HasMany
+    {
+        return $this->hasMany(
+            SellerWithdrawal::class,
+            'seller_id'
+        );
     }
 
     public function products(): HasMany

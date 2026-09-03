@@ -10,6 +10,7 @@ use App\Http\Controllers\PaystackWebhookController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\SellerOrderController;
+use App\Http\Controllers\SellerWalletController;
 
 
 // =====================================================
@@ -167,6 +168,56 @@ Route::middleware([
     Route::get(
         'orders/{id}',
         [SellerOrderController::class, 'show']
+    );
+
+
+    // =================================================
+    // Seller Wallet
+    // =================================================
+
+    Route::get(
+        'wallet',
+        [SellerWalletController::class, 'wallet']
+    );
+
+
+    // =================================================
+    // Seller Banks
+    // =================================================
+
+    Route::get(
+        'banks',
+        [SellerWalletController::class, 'banks']
+    );
+
+
+    // =================================================
+    // Verify Seller Bank Account
+    // =================================================
+
+    Route::post(
+        'bank-account/verify',
+        [SellerWalletController::class, 'verifyAccount']
+    );
+
+
+    // =================================================
+    // Seller Withdrawals
+    // =================================================
+
+    Route::post(
+        'withdrawals',
+        [SellerWalletController::class, 'withdraw']
+    );
+
+    Route::get(
+        'withdrawals',
+        [SellerWalletController::class, 'withdrawals']
+    );
+
+    Route::get(
+        'withdrawals/{id}',
+        [SellerWalletController::class, 'showWithdrawal']
     );
 });
 
